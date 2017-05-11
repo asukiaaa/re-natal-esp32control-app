@@ -1,0 +1,3 @@
+rootProject.name = 'reNatalEsp32ControlApp'
+
+include ':app'

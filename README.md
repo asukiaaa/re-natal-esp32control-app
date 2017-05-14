@@ -7,8 +7,6 @@ A Clojure library designed to control car over BLE connection.
 For a terminal on linux.
 ```
 npm install
-sudo npm install rnpm -g
-rnpm link
 react-native start
 ```
 
@@ -26,4 +24,5 @@ your option) any later version.
 
 # References
 - [react-native-ble](https://github.com/jacobrosenthal/react-native-ble)
-- [react-native-ble/examples/advertisement_discovery/android/app/src/main/java/com/advertisement_discovery/MainApplication.java](https://github.com/jacobrosenthal/react-native-ble/blob/master/examples/advertisement_discovery/android/app/src/main/java/com/advertisement_discovery/MainApplication.java)
+- [android manifest](https://developer.android.com/studio/build/manifest-merge.html)
+- [android BLE](https://developer.android.com/guide/topics/connectivity/bluetooth-le.html)

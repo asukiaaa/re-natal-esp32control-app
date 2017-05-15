@@ -33,3 +33,15 @@
  validate-spec
  (fn [db [_ value]]
    (assoc db :greeting value)))
+
+(reg-event-db
+ :add-device
+ validate-spec
+ (fn [db [_ device]]
+   (update db :devices #(conj % device))))
+
+(reg-event-db
+ :set-devices
+ validate-spec
+ (fn [db [_ devices]]
+   (assoc db :devices devices)))

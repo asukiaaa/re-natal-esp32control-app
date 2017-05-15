@@ -5,3 +5,8 @@
   :get-greeting
   (fn [db _]
     (:greeting db)))
+
+(reg-sub
+ :get-devices
+ (fn [db _]
+   (:devices db)))

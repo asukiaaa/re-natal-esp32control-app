@@ -3,14 +3,24 @@
 A Clojure library designed to control car over BLE connection.
 
 # Usage
-
-For a terminal on linux.
+Install dependencies.
 ```
 npm install
+```
+
+If you want to develop with using figwheel.
+```
+adb reverse tcp:8081 tcp:8081
+adb reverse tcp:3449 tcp:3449
+lein figwheel android
+```
+
+For linux.
+```
 react-native start
 ```
 
-Another terminal on linux.
+Connect your android device to pc and execute the following command to run application on android.
 ```
 react-native run-android
 ```

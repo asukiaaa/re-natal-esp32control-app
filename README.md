@@ -2,6 +2,8 @@
 
 A Clojure library designed to control car over BLE connection.
 
+If you want to make simillar application, [setup memo](/setup_memo.md) may help you.
+
 # Usage
 Install dependencies.
 ```

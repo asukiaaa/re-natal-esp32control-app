@@ -19,7 +19,7 @@
       android:name=".MainApplication"
       android:allowBackup="true"
       android:label="@string/app_name"
-      android:icon="@mipmap/ic_launcher"
+      android:icon="@mipmap/esp32car_icon"
       android:theme="@style/AppTheme">
       <activity
         android:name=".MainActivity"

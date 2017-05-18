@@ -45,3 +45,15 @@
  validate-spec
  (fn [db [_ devices]]
    (assoc db :devices devices)))
+
+(reg-event-db
+ :set-current-device
+ validate-spec
+ (fn [db [_ device]]
+   (assoc db :current-device device)))
+
+(reg-event-db
+ :set-page
+ validate-spec
+ (fn [db [_ page]]
+   (assoc db :page page)))

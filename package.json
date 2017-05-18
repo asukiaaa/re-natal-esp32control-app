@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "babel-plugin-transform-es2015-block-scoping": "6.15.0",
+    "base64-js": "^1.2.0",
     "react": "16.0.0-alpha.6",
     "react-native": "0.43.4",
     "react-native-ble-manager": "^3.2.1"

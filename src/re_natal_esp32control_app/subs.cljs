@@ -10,3 +10,13 @@
  :get-devices
  (fn [db _]
    (:devices db)))
+
+(reg-sub
+ :get-current-device
+ (fn [db _]
+   (:current-device db)))
+
+(reg-sub
+ :get-page
+ (fn [db _]
+   (:page db)))

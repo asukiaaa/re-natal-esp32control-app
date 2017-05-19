@@ -7,7 +7,7 @@
 
 (def ReactNative (js/require "react-native"))
 (def BleManager (js/require "react-native-ble-manager"))
-(def base64 (js/require "base64-js"))
+(def Base64 (js/require "base64-js"))
 
 (def app-registry (.-AppRegistry ReactNative))
 (def text (reagent/adapt-react-class (.-Text ReactNative)))
@@ -77,7 +77,7 @@
 (defn ble-send [device & {:keys [lf lb rf rb]}]
   (let [device (or device @(subscribe [:get-current-device]))]
     (.write BleManager (:id device) service-id characteristic-id
-            (.fromByteArray base64 (clj->js [lf lb rf rb])))))
+            (.fromByteArray Base64 (clj->js [lf lb rf rb])))))
 
 (defn ble-control-page []
   (let [current-device (subscribe [:get-current-device])

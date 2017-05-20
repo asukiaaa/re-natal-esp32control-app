@@ -31,7 +31,7 @@
   (dispatch [:add-device (js->clj data :keywordize-keys true)]))
 
 (defn ble-scan []
-  (-> (.scan BleManager (clj->js []) 30 true)
+  (-> (.scan BleManager (clj->js []) 5 true)
       (.then (fn []
                (prn :finished-scan)))))
 

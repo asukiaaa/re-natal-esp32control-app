@@ -32,8 +32,8 @@
 
 (defn ble-scan []
   (-> (.scan BleManager (clj->js []) 30 true)
-      (.then (fn [results]
-               (prn :finished-scan results)))))
+      (.then (fn []
+               (prn :finished-scan)))))
 
 (defn device-button [device]
   [touchable-highlight

@@ -27,13 +27,13 @@
   (.alert (.-Alert ReactNative) title))
 
 (defn handle-discovered-peripheral [data]
-  (prn :discovered data)
+  #_(prn :discovered data)
   (dispatch [:add-device (js->clj data :keywordize-keys true)]))
 
 (defn ble-scan []
   (-> (.scan BleManager (clj->js []) 5 true)
       (.then (fn []
-               (prn :finished-scan)))))
+               #_(prn :finished-scan)))))
 
 (defn device-button [device]
   [touchable-highlight
@@ -114,7 +114,7 @@
       :component-will-mount #(-> (.connect BleManager (:id @current-device))
                                  (.then (fn [peri-info]
                                           (reset! connected? true)
-                                          (prn :peri-info peri-info))))
+                                          #_(prn :peri-info peri-info))))
       :component-will-unmount #(.disconnect BleManager (:id @current-device))})))
 
 (defn top-page []

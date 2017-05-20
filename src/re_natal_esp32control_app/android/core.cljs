@@ -53,6 +53,7 @@
                            [text {:style {:margin 10}}
                             "no device"]
                            (for [device @devices]
+                             ^{:key (:id device)}
                              [device-button device]))]))
     :component-will-mount (fn [this]
                            (.start BleManager {:showAlert false})

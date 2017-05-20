@@ -38,7 +38,13 @@
  :add-device
  validate-spec
  (fn [db [_ device]]
-   (update db :devices #(conj % device))))
+   ; avoid duplicate saving
+   ; may be bug of ble scanning
+   (let [device-id (:id device)
+         device-ids (map :id (:devices db))]
+     (if (some #(= % device-id) device-ids)
+       db
+       (update db :devices #(conj % device))))))
 
 (reg-event-db
  :set-devices

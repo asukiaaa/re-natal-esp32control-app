@@ -144,4 +144,4 @@
 
 (defn init []
   (dispatch-sync [:initialize-db])
-  (.registerComponent app-registry "reNatalEsp32ControlApp" #(r/reactify-component app-root)))
+  (.registerComponent app-registry "reNatalEsp32ControlApp" #(reagent/reactify-component app-root)))

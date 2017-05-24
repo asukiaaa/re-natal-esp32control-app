@@ -18,7 +18,7 @@
 (def permissions-android (.-PermissionsAndroid ReactNative))
 (def native-app-event-emitter (.-NativeAppEventEmitter ReactNative))
 
-(def logo-img (js/require "./images/cljs.png"))
+(def logo-img (js/require "./images/esp32car.png"))
 
 (def service-id "00ff")
 (def characteristic-id "ff01")

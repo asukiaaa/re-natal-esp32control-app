@@ -2,7 +2,7 @@
 
 A Clojure library designed to control car over BLE connection.
 
-[![image](https://developer.android.com/images/brand/en_app_rgb_wo_45.png)](https://play.google.com/store/apps/details?id=com.renatalesp32controlapp)
+[![image](doc/google_play.png)](https://play.google.com/store/apps/details?id=com.renatalesp32controlapp)
 
 If you want to make simillar application, [setup memo](/setup_memo.md) may help you.
 

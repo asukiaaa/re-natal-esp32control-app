@@ -15,7 +15,6 @@
 (def list-view (reagent/adapt-react-class (.-ListView ReactNative)))
 (def image (reagent/adapt-react-class (.-Image ReactNative)))
 (def touchable-highlight (reagent/adapt-react-class (.-TouchableHighlight ReactNative)))
-(def permissions-android (.-PermissionsAndroid ReactNative))
 (def native-app-event-emitter (.-NativeAppEventEmitter ReactNative))
 
 (def logo-img (js/require "./images/esp32car.png"))
@@ -57,14 +56,7 @@
                              [device-button device]))]))
     :component-will-mount (fn [this]
                            (.start BleManager {:showAlert false})
-                           (.addListener native-app-event-emitter "BleManagerDiscoverPeripheral" handle-discovered-peripheral)
-                           (let [permission-type (-> (.-PERMISSIONS permissions-android)
-                                                     (.-ACCESS_COARSE_LOCATION))]
-                             (-> (.check permissions-android permission-type)
-                                 (.then (fn [ok?]
-                                          (if ok?
-                                            nil #_(ble-scan)
-                                            (js/alert (str "permission is bad"))))))))}))
+                           (.addListener native-app-event-emitter "BleManagerDiscoverPeripheral" handle-discovered-peripheral))}))
 
 (defn control-button [label on-press on-release]
   [touchable-highlight {:style {:background-color "#494" :width 100 :height 100 :margin 5 :border-radius 5}

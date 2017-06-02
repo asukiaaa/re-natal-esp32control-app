@@ -106,6 +106,24 @@ For `android/app/src/main/AndroidManifest.xml`.
 </manifest>
 ```
 
+## Assign different version and id to release and debug application
+For default setting, you need to uninstall your app to switching release and debug.
+
+You can use debug and release app in same device with adding the following setting to `android/app/build.gradle`.
+
+```
+android {
+    ...
+    buildTypes {
+        debug {
+            ...
+            versionNameSuffix "-dev"
+            applicationIdSuffix ".dev"
+        }
+    }
+}
+```
+
 # Every time per release
 
 ## Update version

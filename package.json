@@ -10,7 +10,7 @@
     "babel-plugin-transform-es2015-block-scoping": "6.15.0",
     "react": "16.0.0-alpha.6",
     "react-native": "0.43.4",
-    "react-native-ble-manager": "^3.3.0"
+    "react-native-ble-manager": "5.0.4"
   },
   "devDependencies": {
     "babel-jest": "20.0.0",

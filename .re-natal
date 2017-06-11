@@ -6,8 +6,7 @@
     "prod": "env/prod"
   },
   "modules": [
-    "react-native-ble-manager",
-    "base64-js"
+    "react-native-ble-manager"
   ],
   "imageDirs": [
     "images"

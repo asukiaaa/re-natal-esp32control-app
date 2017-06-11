@@ -5,9 +5,7 @@ Commands and setting that I did for setup.
 re-natal init reNatalEsp32controlApp
 cd re-natal-esp32-control-app
 npm install --save react-native-ble-manager
-npm install --save base64-js
 re-natal use-component react-native-ble-manager
-re-natal use-component base64-js
 re-natal use-android-device real
 re-natal use-figwheel
 rect-native link

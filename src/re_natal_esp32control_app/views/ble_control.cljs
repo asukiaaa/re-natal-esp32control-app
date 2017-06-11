@@ -5,15 +5,17 @@
 
 (def ReactNative (js/require "react-native"))
 (def BleManager (js/require "react-native-ble-manager"))
-(def Base64 (js/require "base64-js"))
 
 (def service-id "00ff")
 (def characteristic-id "ff01")
 
 (defn ble-send [device & {:keys [lf lb rf rb]}]
-  (let [device (or device @(subscribe [:get-current-device]))]
-    (.write BleManager (:id device) service-id characteristic-id
-            (.fromByteArray Base64 (clj->js [lf lb rf rb])))))
+  (let [device (or device @(subscribe [:get-current-device]))
+        data (map #(if (nil? %) 0 %) [lf lb rf rb])]
+    (-> (.retrieveServices BleManager (:id device))
+        (.then (fn [peri-info]
+                 (.write BleManager (:id device) service-id characteristic-id
+                         (clj->js data)))))))
 
 (defn control-button [label on-press on-release]
   [v.common/touchable-highlight

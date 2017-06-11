@@ -39,6 +39,6 @@ Distributed under the Eclipse Public License either version 1.0 or (at
 your option) any later version.
 
 # References
-- [react-native-ble](https://github.com/jacobrosenthal/react-native-ble)
+- [react-native-ble-manager](https://github.com/innoveit/react-native-ble-manager)
 - [android manifest](https://developer.android.com/studio/build/manifest-merge.html)
 - [android BLE](https://developer.android.com/guide/topics/connectivity/bluetooth-le.html)

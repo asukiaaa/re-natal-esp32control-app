@@ -89,7 +89,7 @@ android {
     defaultConfig {
         applicationId "com.renatalesp32controlapp"
         minSdkVersion 16
-        targetSdkVersion 23
+        targetSdkVersion 22
         versionCode 3
         versionName "1.2"
         ndk {

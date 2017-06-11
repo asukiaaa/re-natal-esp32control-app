@@ -1,6 +1,6 @@
 (ns re-natal-esp32control-app.android.core
   (:require [clojure.string :as str]
-            [reagent.core :as reagent :refer [atom]]
+            [reagent.core :as r]
             [re-frame.core :refer [subscribe dispatch dispatch-sync]]
             [re-natal-esp32control-app.events]
             [re-natal-esp32control-app.subs]))
@@ -10,11 +10,11 @@
 (def Base64 (js/require "base64-js"))
 
 (def app-registry (.-AppRegistry ReactNative))
-(def text (reagent/adapt-react-class (.-Text ReactNative)))
-(def view (reagent/adapt-react-class (.-View ReactNative)))
-(def list-view (reagent/adapt-react-class (.-ListView ReactNative)))
-(def image (reagent/adapt-react-class (.-Image ReactNative)))
-(def touchable-highlight (reagent/adapt-react-class (.-TouchableHighlight ReactNative)))
+(def text (r/adapt-react-class (.-Text ReactNative)))
+(def view (r/adapt-react-class (.-View ReactNative)))
+(def list-view (r/adapt-react-class (.-ListView ReactNative)))
+(def image (r/adapt-react-class (.-Image ReactNative)))
+(def touchable-highlight (r/adapt-react-class (.-TouchableHighlight ReactNative)))
 (def native-app-event-emitter (.-NativeAppEventEmitter ReactNative))
 
 (def logo-img (js/require "./images/esp32car.png"))
@@ -44,7 +44,7 @@
     [text (:name device) " " (:id device)]]])
 
 (defn ble-devices-box []
-  (reagent/create-class
+  (r/create-class
    {:reagent-render (fn []
                       (let [devices (subscribe [:get-devices])]
                         [view
@@ -74,8 +74,8 @@
 
 (defn ble-control-page []
   (let [current-device (subscribe [:get-current-device])
-        connected? (reagent/atom false)]
-    (reagent/create-class
+        connected? (r/atom false)]
+    (r/create-class
      {:reagent-render
       (fn []
         [view
@@ -137,4 +137,4 @@
 
 (defn init []
   (dispatch-sync [:initialize-db])
-  (.registerComponent app-registry "reNatalEsp32ControlApp" #(reagent/reactify-component app-root)))
+  (.registerComponent app-registry "reNatalEsp32ControlApp" #(r/reactify-component app-root)))

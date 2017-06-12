@@ -19,12 +19,12 @@
 (defn start-ble-manager []
   (-> (.start BleManager {:showAlert false :allowDuplication false})
       (.then (fn []
+               (.enableBluetooth BleManager)
                #_(js/alert "module initialized"))))
   #_(.addListener ble-manager-emitter "BleManagerStopScan" #(js/alert "stopped scanning"))
   (.addListener ble-manager-emitter "BleManagerDiscoverPeripheral" handle-discovered-peripheral))
 
 (defn init []
-  (.enableBluetooth BleManager)
   (when (= (.-OS platform) "android")
     (if (< (.-Version platform) 23)
       (start-ble-manager)

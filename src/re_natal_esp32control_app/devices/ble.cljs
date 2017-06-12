@@ -37,6 +37,7 @@
                        (start-ble-manager)
                        (-> (.request permissions-android access-permission)
                            (.then (fn [result]
+                                    (start-ble-manager)
                                     #_(js/alert (str "requested " result)))))))))))))
 
 (defn scan []

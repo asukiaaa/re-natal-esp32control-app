@@ -1,21 +1,11 @@
 (ns re-natal-esp32control-app.views.ble-control
   (:require [reagent.core :as r]
+            [re-natal-esp32control-app.devices.ble :as ble]
             [re-natal-esp32control-app.views.common :as v.common]
             [re-frame.core :refer [subscribe dispatch dispatch-sync]]))
 
-(def ReactNative (js/require "react-native"))
-(def BleManager (js/require "react-native-ble-manager"))
-
 (def service-id "00ff")
 (def characteristic-id "ff01")
-
-(defn ble-send [device & {:keys [lf lb rf rb]}]
-  (let [device (or device @(subscribe [:get-current-device]))
-        data (map #(if (nil? %) 0 %) [lf lb rf rb])]
-    (-> (.retrieveServices BleManager (:id device))
-        (.then (fn [peri-info]
-                 (.write BleManager (:id device) service-id characteristic-id
-                         (clj->js data)))))))
 
 (defn control-button [label on-press on-release]
   [v.common/touchable-highlight
@@ -26,6 +16,10 @@
     :on-release on-release}
    [v.common/text {:style {:color "#fff" :text-align "center" :height 100}}
     label]])
+
+(defn ble-send [device & {:keys [lf lb rf rb]}]
+  (let [data (map #(if (nil? %) 0 %) [lf lb rf rb])]
+    (ble/write (:id device) service-id characteristic-id data)))
 
 (defn ble-control-page []
   (let [current-device (subscribe [:get-current-device])
@@ -58,8 +52,7 @@
              [control-button "back right"    #(ble-send @current-device :lb 255)]]]
            [v.common/view {:style {:align-content "center" :align-self "center"}}
             [v.common/text "connecting"]])])
-      :component-will-mount #(-> (.connect BleManager (:id @current-device))
-                                 (.then (fn [peri-info]
-                                          (reset! connected? true)
-                                          #_(prn :peri-info peri-info))))
-      :component-will-unmount #(.disconnect BleManager (:id @current-device))})))
+      :component-will-mount (fn []
+                              (ble/connect (:id @current-device)
+                                           :on-success #(reset! connected? true)))
+      :component-will-unmount #(ble/disconnect (:id @current-device))})))

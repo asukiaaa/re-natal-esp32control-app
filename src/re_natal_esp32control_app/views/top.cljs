@@ -32,16 +32,17 @@
 (defn top-page []
   (let [greeting (subscribe [:get-greeting])]
     (fn []
-      [v.common/view {:style {:flex-direction "column" :margin 40 :align-items "center"}}
-       [v.common/text {:style {:font-size 30 :font-weight "100" :margin-bottom 20 :text-align "center"}}
-        @greeting]
-       [v.common/image {:source logo-img
-                        :style  {:width 80 :height 80 :margin-bottom 30}}]
-       [v.common/touchable-highlight
-        {:style {:background-color "#999" :padding 10 :border-radius 5}
-         :on-press (fn []
-                     (dispatch [:set-devices []])
-                     (ble/scan))}
-        [v.common/text {:style {:color "white" :text-align "center" :font-weight "bold"}}
-         "BLE scan"]]
-       [ble-devices-box]])))
+      [v.common/scroll-view
+       [v.common/view {:style {:flex-direction "column" :margin 40 :align-items "center"}}
+        [v.common/text {:style {:font-size 30 :font-weight "100" :margin-bottom 20 :text-align "center"}}
+         @greeting]
+        [v.common/image {:source logo-img
+                         :style  {:width 80 :height 80 :margin-bottom 30}}]
+        [v.common/touchable-highlight
+         {:style {:background-color "#999" :padding 10 :border-radius 5}
+          :on-press (fn []
+                      (dispatch [:set-devices []])
+                      (ble/scan))}
+         [v.common/text {:style {:color "white" :text-align "center" :font-weight "bold"}}
+          "BLE scan"]]
+        [ble-devices-box]]])))

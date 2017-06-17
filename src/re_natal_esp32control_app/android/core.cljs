@@ -14,10 +14,9 @@
 (defn app-root []
   (let [page (subscribe [:get-page])]
     (fn []
-      [v.common/view
-       (case @page
-         :ble-control [v.ble-control/ble-control-page]
-         [v.top/top-page])])))
+      (case @page
+        :ble-control [v.ble-control/ble-control-page]
+        [v.top/top-page]))))
 
 (defn init []
   (dispatch-sync [:initialize-db])

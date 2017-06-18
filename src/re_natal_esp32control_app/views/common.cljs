@@ -8,6 +8,7 @@
 (def view (r/adapt-react-class (.-View ReactNative)))
 (def scroll-view (r/adapt-react-class (.-ScrollView ReactNative)))
 (def list-view (r/adapt-react-class (.-ListView ReactNative)))
+(def flat-list (r/adapt-react-class (.-FlatList ReactNative)))
 (def image (r/adapt-react-class (.-Image ReactNative)))
 (def touchable-highlight (r/adapt-react-class (.-TouchableHighlight ReactNative)))
 

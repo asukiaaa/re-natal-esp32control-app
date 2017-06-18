@@ -25,9 +25,12 @@
        (if (empty? @devices)
          [v.common/text {:style {:margin 10}}
           "no device"]
-         (for [device @devices]
-           ^{:key (:id device)}
-           [device-button device]))])))
+         [v.common/flat-list
+          {:data (clj->js @devices)
+           :key-extractor (fn [item index]
+                            (:id (js->clj item :keywordize-keys true)))
+           :render-item #(let [device (:item (js->clj % :keywordize-keys true))]
+                           (r/as-element [device-button device]))}])])))
 
 (defn top-page []
   (let [greeting (subscribe [:get-greeting])]

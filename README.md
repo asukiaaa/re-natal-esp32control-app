@@ -11,7 +11,7 @@ If you want reference how to release this app, [release memo](/release_memo.md) 
 # Usage
 Install dependencies.
 ```
-npm install
+yarn install
 ```
 
 If you want to develop with using figwheel.

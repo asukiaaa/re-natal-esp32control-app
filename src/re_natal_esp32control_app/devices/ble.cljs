@@ -62,5 +62,5 @@
 (defn write [device-id service-id chara-id data]
   (-> (.retrieveServices BleManager device-id)
       (.then (fn [peri-info]
-               (.write BleManager device-id service-id chara-id
-                       (clj->js data))))))
+               (.writeWithoutResponse BleManager device-id service-id chara-id
+                                      (clj->js data))))))

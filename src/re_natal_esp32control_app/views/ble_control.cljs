@@ -7,13 +7,14 @@
 (def service-id "00ff")
 (def characteristic-id "ff01")
 
-(defn touch-button [label on-press on-release]
-  [v.common/touchable-highlight
+(defn touch-button [label on-touch on-release]
+  [v.common/view
    {:style {:background-color "#494" :width 100 :height 100 :margin 5 :border-radius 5}
     :justify-content "center"
     :align-items "center"
-    :on-press on-press
-    :on-release on-release}
+    :on-start-should-set-responder (fn [evt] true)
+    :on-responder-grant #(on-touch)
+    :on-responder-release #(on-release)}
    [v.common/text {:style {:color "#fff" :text-align "center" :height 100}}
     label]])
 

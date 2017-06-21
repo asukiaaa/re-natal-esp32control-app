@@ -42,15 +42,58 @@
       [control-button "back"          {:lb 255 :rb 255}]
       [control-button "back right"    {:lb 255}]]]))
 
-(defn joystick []
-  [v.common/view
-   [v.common/text "joystick here"]])
+(defn calc-rate-x-y [p-x p-y view-x view-y view-w view-h]
+  (let [harf-w (/ view-w 2)
+        harf-h (/ view-h 2)
+        rate-x (/ (- p-x view-x harf-w) harf-w)
+        rate-y (/ (- p-y view-y harf-h) harf-h)]
+    {:x rate-x :y rate-y}))
+
+(defn joystick [on-move on-release]
+  (let [view-x (r/atom nil)
+        view-y (r/atom nil)
+        view-w 300
+        view-h 300
+        joystick-ref (r/atom nil)
+        update-view-x-y #(.measure @joystick-ref (fn [fx fy w h px py]
+                                                   (reset! view-x px)
+                                                   (reset! view-y py)))
+        action-after-calc (fn [evt]
+                            (-> (calc-rate-x-y (.-pageX (.-nativeEvent evt))
+                                               (.-pageY (.-nativeEvent evt))
+                                               @view-x @view-y view-w view-h)
+                                (on-move)))]
+    (r/create-class
+     {:reagent-render
+      (fn []
+        [v.common/view
+         {:ref "joystickArea"
+          :style {:align-content "center" :align-self "center"
+                  :width view-w
+                  :height view-h
+                  :background-color "#beb"}
+          :on-layout (fn [this]
+                       (update-view-x-y))
+          :on-start-should-set-responder (fn [] true)
+          :on-move-should-set-responder (fn [] true)
+          :on-responder-grant #(action-after-calc %)
+          :on-responder-move #(action-after-calc %)
+          :on-responder-release (fn [] (on-release))}])
+
+      :component-did-mount
+      (fn [this]
+        (reset! joystick-ref (-> (.-refs this)
+                                 (.-joystickArea))))})))
 
 (def control-modes
   [{:id :joystick
     :name "Joystick"}
    {:id :tile-buttons
     :name "Tile Buttons"}])
+
+(defn all-range-action [{:keys [x y]}]
+  (prn :x x)
+  (prn :y y))
 
 (defn control-area []
   (let [control-mode (r/atom (:id (first control-modes)))]
@@ -73,7 +116,7 @@
             [v.common/text name]]))]
        (case @control-mode
          :tile-buttons [tile-buttons]
-         [joystick])])))
+         [joystick #(all-range-action %) #(all-range-action {:x 0 :y 0})])])))
 
 (defn ble-control-page []
   (let [current-device (subscribe [:get-current-device])

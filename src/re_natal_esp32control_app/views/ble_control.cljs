@@ -1,5 +1,6 @@
 (ns re-natal-esp32control-app.views.ble-control
-  (:require [reagent.core :as r]
+  (:require [clojure.string :as str]
+            [reagent.core :as r]
             [re-natal-esp32control-app.devices.ble :as ble]
             [re-natal-esp32control-app.views.common :as v.common]
             [re-frame.core :refer [subscribe dispatch dispatch-sync]]))
@@ -41,6 +42,39 @@
       [control-button "back"          {:lb 255 :rb 255}]
       [control-button "back right"    {:lb 255}]]]))
 
+(defn joystick []
+  [v.common/view
+   [v.common/text "joystick here"]])
+
+(def control-modes
+  [{:id :joystick
+    :name "Joystick"}
+   {:id :tile-buttons
+    :name "Tile Buttons"}])
+
+(defn control-area []
+  (let [control-mode (r/atom (:id (first control-modes)))]
+    (fn []
+      [v.common/view
+       [v.common/view {:style {:flex-direction "row"
+                               :margin-bottom 40}}
+        (doall
+         (for [{:keys [id name]} control-modes
+               :let [selected? (= @control-mode id)]]
+           ^{:key (str :mode-select- id)}
+           [v.common/touchable-highlight
+            {:style {:background-color "#ccc"
+                     :padding 10
+                     :border-width 3
+                     :border-color (if selected? "#666" "#ccc")
+                     :margin 5
+                     :border-radius 5}
+             :on-press #(reset! control-mode id)}
+            [v.common/text name]]))]
+       (case @control-mode
+         :tile-buttons [tile-buttons]
+         [joystick])])))
+
 (defn ble-control-page []
   (let [current-device (subscribe [:get-current-device])
         connected? (r/atom false)]
@@ -57,7 +91,7 @@
              (:name @current-device)]
             [v.common/text (:id @current-device)]]
          (if @connected?
-           [tile-buttons]
+           [control-area]
            [v.common/view {:style {:align-content "center" :align-self "center"}}
             [v.common/text "connecting"]])])
       :component-will-mount (fn []

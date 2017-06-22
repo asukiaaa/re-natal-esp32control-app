@@ -43,7 +43,7 @@
       [control-button "back"          {:lb 255 :rb 255}]
       [control-button "back right"    {:lb 255}]]]))
 
-(defn calc-rate-x-y [p-x p-y view-x view-y view-w view-h]
+(defn rate-x-y [p-x p-y view-x view-y view-w view-h]
   (let [harf-w (/ view-w 2)
         harf-h (/ view-h 2)
         rate-x (/ (- p-x view-x harf-w) harf-w)
@@ -59,11 +59,11 @@
         update-view-x-y #(.measure @joystick-ref (fn [fx fy w h px py]
                                                    (reset! view-x px)
                                                    (reset! view-y py)))
-        action-after-calc (fn [evt]
-                            (-> (calc-rate-x-y (.-pageX (.-nativeEvent evt))
-                                               (.-pageY (.-nativeEvent evt))
-                                               @view-x @view-y view-w view-h)
-                                (on-move)))]
+        action (fn [evt]
+                 (-> (rate-x-y (.-pageX (.-nativeEvent evt))
+                               (.-pageY (.-nativeEvent evt))
+                               @view-x @view-y view-w view-h)
+                     (on-move)))]
     (r/create-class
      {:reagent-render
       (fn []
@@ -79,8 +79,8 @@
            :on-layout #(update-view-x-y)
            :on-start-should-set-responder (fn [] true)
            :on-move-should-set-responder (fn [] true)
-           :on-responder-grant #(action-after-calc %)
-           :on-responder-move #(action-after-calc %)
+           :on-responder-grant #(action %)
+           :on-responder-move #(action %)
            :on-responder-release #(on-release)}]])
 
       :component-did-mount
@@ -102,9 +102,9 @@
 (defn all-range-action [{:keys [x y]}]
   (when (and x y)
     (let [f (rate->byte (- y))
-          b (rate->byte  y)
+          b (rate->byte y)
           l (rate->byte (- x))
-          r (rate->byte  x)
+          r (rate->byte x)
           lf (max 0 (- f l))
           rf (max 0 (- f r))
           lb (max 0 (- b l))

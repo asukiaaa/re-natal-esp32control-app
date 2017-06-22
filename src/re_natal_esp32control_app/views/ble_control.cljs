@@ -7,6 +7,7 @@
 
 (def service-id "00ff")
 (def characteristic-id "ff01")
+(def joystick-img (js/require "./images/joystick.png"))
 
 (defn touch-button [label on-touch on-release]
   [v.common/view
@@ -66,18 +67,21 @@
     (r/create-class
      {:reagent-render
       (fn []
-        [v.common/view
-         {:ref "joystickArea"
-          :style {:align-content "center" :align-self "center"
-                  :width view-w
-                  :height view-h
-                  :background-color "#beb"}
-          :on-layout #(update-view-x-y)
-          :on-start-should-set-responder (fn [] true)
-          :on-move-should-set-responder (fn [] true)
-          :on-responder-grant #(action-after-calc %)
-          :on-responder-move #(action-after-calc %)
-          :on-responder-release #(on-release)}])
+        [v.common/image
+         {:source joystick-img
+          :style {:resize-mode "cover"
+                  :background-color "#beb"
+                  :align-self "center"}}
+         [v.common/view
+          {:ref "joystickArea"
+           :style {:width view-w
+                   :height view-h}
+           :on-layout #(update-view-x-y)
+           :on-start-should-set-responder (fn [] true)
+           :on-move-should-set-responder (fn [] true)
+           :on-responder-grant #(action-after-calc %)
+           :on-responder-move #(action-after-calc %)
+           :on-responder-release #(on-release)}]])
 
       :component-did-mount
       #(reset! joystick-ref (-> (.-refs %)

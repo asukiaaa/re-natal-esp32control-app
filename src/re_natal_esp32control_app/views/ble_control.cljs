@@ -19,15 +19,15 @@
    [v.common/text {:style {:color "#fff" :text-align "center" :height 100}}
     label]])
 
-(defn ble-send [device & [{:keys [lf lb rf rb]}]]
-  (let [data (map #(if (nil? %) 0 %) [lf lb rf rb])]
-    (ble/write (:id device) service-id characteristic-id data)))
+(defn ble-send [{:keys [lf lb rf rb]}]
+  (let [current-device (subscribe [:get-current-device])
+        data (map #(if (nil? %) 0 %) [lf lb rf rb])]
+    (ble/write (:id @current-device) service-id characteristic-id data)))
 
 (defn tile-buttons []
-  (let [current-device (subscribe [:get-current-device])
-        stop #(ble-send @current-device)
+  (let [stop #(ble-send {})
         control-button (fn [label signals]
-                             [touch-button label #(ble-send @current-device signals) stop])]
+                             [touch-button label #(ble-send signals) stop])]
     [v.common/view {:style {:align-content "center" :align-self "center"}}
      [v.common/view {:style {:flex-direction "row"}}
       [control-button "left foreward" {:rf 255}]
@@ -72,18 +72,16 @@
                   :width view-w
                   :height view-h
                   :background-color "#beb"}
-          :on-layout (fn [this]
-                       (update-view-x-y))
+          :on-layout #(update-view-x-y)
           :on-start-should-set-responder (fn [] true)
           :on-move-should-set-responder (fn [] true)
           :on-responder-grant #(action-after-calc %)
           :on-responder-move #(action-after-calc %)
-          :on-responder-release (fn [] (on-release))}])
+          :on-responder-release #(on-release)}])
 
       :component-did-mount
-      (fn [this]
-        (reset! joystick-ref (-> (.-refs this)
-                                 (.-joystickArea))))})))
+      #(reset! joystick-ref (-> (.-refs %)
+                                (.-joystickArea)))})))
 
 (def control-modes
   [{:id :joystick
@@ -91,9 +89,23 @@
    {:id :tile-buttons
     :name "Tile Buttons"}])
 
+(defn rate->byte [rate]
+  (-> rate
+      (min 1)
+      (max 0)
+      (* 255)))
+
 (defn all-range-action [{:keys [x y]}]
-  (prn :x x)
-  (prn :y y))
+  (when (and x y)
+    (let [f (rate->byte (- y))
+          b (rate->byte  y)
+          l (rate->byte (- x))
+          r (rate->byte  x)
+          lf (max 0 (- f l))
+          rf (max 0 (- f r))
+          lb (max 0 (- b l))
+          rb (max 0 (- b r))]
+      (ble-send {:lf (int lf) :rf (int rf) :lb (int lb) :rb (int rb)}))))
 
 (defn control-area []
   (let [control-mode (r/atom (:id (first control-modes)))]

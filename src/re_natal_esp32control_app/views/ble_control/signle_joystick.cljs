@@ -23,4 +23,4 @@
       (v.ble-common/ble-send {:lf (int lf) :rf (int rf) :lb (int lb) :rb (int rb)}))))
 
 (defn single-joystick-panel []
-  [v.ble-common/joystick #(all-range-action %) #(all-range-action {:x 0 :y 0})])
+  [v.ble-common/joystick :single-joystick #(all-range-action %) #(all-range-action {:x 0 :y 0})])

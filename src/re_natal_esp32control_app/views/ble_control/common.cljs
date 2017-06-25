@@ -20,15 +20,16 @@
         rate-y (/ (- p-y view-y harf-h) harf-h)]
     {:x rate-x :y rate-y}))
 
-(defn joystick [on-move on-release]
+(defn joystick [id on-move on-release]
   (let [view-x (r/atom nil)
         view-y (r/atom nil)
         view-w 300
         view-h 300
-        joystick-ref (r/atom nil)
-        update-view-x-y #(.measure @joystick-ref (fn [fx fy w h px py]
-                                                   (reset! view-x px)
-                                                   (reset! view-y py)))
+        ref (str "joystick-" id)
+        ref-obj (r/atom nil)
+        update-view-x-y #(.measure @ref-obj (fn [fx fy w h px py]
+                                              (reset! view-x px)
+                                              (reset! view-y py)))
         action (fn [evt]
                  (-> (rate-x-y (.-pageX (.-nativeEvent evt))
                                (.-pageY (.-nativeEvent evt))
@@ -43,7 +44,7 @@
                   :background-color "#beb"
                   :align-self "center"}}
          [v.common/view
-          {:ref "joystickArea"
+          {:ref ref
            :style {:width view-w
                    :height view-h}
            :on-layout #(update-view-x-y)
@@ -54,5 +55,5 @@
            :on-responder-release #(on-release)}]])
 
       :component-did-mount
-      #(reset! joystick-ref (-> (.-refs %)
-                                (.-joystickArea)))})))
+      #(reset! ref-obj (-> (.-refs %)
+                           (aget ref)))})))

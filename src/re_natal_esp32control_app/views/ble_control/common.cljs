@@ -6,7 +6,6 @@
 
 (def service-id "00ff")
 (def characteristic-id "ff01")
-(def joystick-img (js/require "./images/joystick.png"))
 
 (defn ble-send [{:keys [lf lb rf rb]}]
   (let [current-device (subscribe [:get-current-device])
@@ -20,16 +19,30 @@
         rate-y (/ (- p-y view-y harf-h) harf-h)]
     {:x rate-x :y rate-y}))
 
-(defn joystick [id on-move on-release]
+(defn joystick [id on-move on-release & [{:keys [width height] :or {width 300 height 300}}]]
   (let [view-x (r/atom nil)
         view-y (r/atom nil)
-        view-w 300
-        view-h 300
+        view-w width
+        view-h height
+        center-r 75
+        target-r 50
+        posi-x-base (/ view-w 2)
+        posi-y-base (/ view-h 2)
+        value-x (r/atom 0)
+        value-y (r/atom 0)
         ref (str "joystick-" id)
         ref-obj (r/atom nil)
         update-view-x-y #(.measure @ref-obj (fn [fx fy w h px py]
                                               (reset! view-x px)
                                               (reset! view-y py)))
+        on-move (fn [{:keys [x y] :as xy}]
+                  (reset! value-x x)
+                  (reset! value-y y)
+                  (on-move xy))
+        on-release (fn []
+                     (reset! value-x 0)
+                     (reset! value-y 0)
+                     (on-release))
         action (fn [evt]
                  (-> (rate-x-y (.-pageX (.-nativeEvent evt))
                                (.-pageY (.-nativeEvent evt))
@@ -38,21 +51,32 @@
     (r/create-class
      {:reagent-render
       (fn []
-        [v.common/image
-         {:source joystick-img
-          :style {:resize-mode "cover"
-                  :background-color "#beb"
-                  :align-self "center"}}
-         [v.common/view
-          {:ref ref
-           :style {:width view-w
-                   :height view-h}
-           :on-layout #(update-view-x-y)
-           :on-start-should-set-responder (fn [] true)
-           :on-move-should-set-responder (fn [] true)
-           :on-responder-grant #(action %)
-           :on-responder-move #(action %)
-           :on-responder-release #(on-release)}]])
+        [v.common/view
+         {:ref ref
+          :style {:background-color "#beb"
+                  :align-self "center"
+                  :width view-w
+                  :height view-h}
+          :on-layout #(update-view-x-y)
+          :on-start-should-set-responder (fn [] true)
+          :on-move-should-set-responder (fn [] true)
+          :on-responder-grant #(action %)
+          :on-responder-move #(action %)
+          :on-responder-release #(on-release)}
+         [v.common/view {:style {:background-color "#fff"
+                                 :width (* center-r 2)
+                                 :height (* center-r 2)
+                                 :border-radius center-r
+                                 :position "absolute"
+                                 :top (- (/ view-h 2) center-r)
+                                 :left (- (/ view-w 2) center-r)}}]
+         [v.common/view {:style {:background-color "#777"
+                                 :width (* target-r 2)
+                                 :height (* target-r 2)
+                                 :border-radius target-r
+                                 :position "absolute"
+                                 :top (- (+ posi-y-base (* posi-y-base @value-y)) target-r)
+                                 :left (- (+ posi-x-base (* posi-x-base @value-x)) target-r)}}]])
 
       :component-did-mount
       #(reset! ref-obj (-> (.-refs %)

@@ -20,3 +20,13 @@
  :get-page
  (fn [db _]
    (:page db)))
+
+(reg-sub
+ :speed
+ (fn [db _]
+   (:speed db)))
+
+(reg-sub
+ :sent-speed
+ (fn [db _]
+   (:sent-speed db)))

@@ -63,3 +63,13 @@
  validate-spec
  (fn [db [_ page]]
    (assoc db :page page)))
+
+(reg-event-db
+ :set-speed
+ (fn [db [_ speed]]
+   (assoc db :speed speed)))
+
+(reg-event-db
+ :set-sent-speed
+ (fn [db [_ speed]]
+   (assoc db :sent-speed speed)))

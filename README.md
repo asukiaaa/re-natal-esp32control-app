@@ -42,3 +42,4 @@ your option) any later version.
 - [react-native-ble-manager](https://github.com/innoveit/react-native-ble-manager)
 - [android manifest](https://developer.android.com/studio/build/manifest-merge.html)
 - [android BLE](https://developer.android.com/guide/topics/connectivity/bluetooth-le.html)
+- [Gesture Responder System](https://facebook.github.io/react-native/docs/gesture-responder-system.html)

@@ -5,11 +5,14 @@
             [re-natal-esp32control-app.views.common :as v.common]
             [re-natal-esp32control-app.views.ble-control.single-joystick :as v.single-joystick]
             [re-natal-esp32control-app.views.ble-control.tile-buttons :as v.tile-buttons]
+            [re-natal-esp32control-app.views.ble-control.toggle-bars :as v.toggle-bars]
             [re-frame.core :refer [subscribe dispatch dispatch-sync]]))
 
 (def control-modes
   [{:id :single-joystick
     :name "A Joystick"}
+   {:id :toggle-bars
+    :name "Toggle"}
    {:id :tile-buttons
     :name "Tile Buttons"}])
 
@@ -34,6 +37,7 @@
             [v.common/text name]]))]
        (case @control-mode
          :tile-buttons [v.tile-buttons/tile-buttons-panel]
+         :toggle-bars [v.toggle-bars/toggle-bars-panel]
          [v.single-joystick/single-joystick-panel])])))
 
 (defn ble-control-page []

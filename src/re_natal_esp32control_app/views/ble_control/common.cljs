@@ -12,7 +12,20 @@
         data (map #(if (nil? %) 0 %) [lf lb rf rb])]
     (ble/write (:id @current-device) service-id characteristic-id data)))
 
-(defn rate-x-y [p-x p-y view-x view-y view-w view-h]
+(defn- same-speed? [speed1 speed2]
+  (and (= (:lf speed1) (:lf speed2))
+       (= (:lb speed1) (:lb speed2))
+       (= (:rf speed1) (:rf speed2))
+       (= (:lb speed1) (:lb speed2))))
+
+(defn send-speed []
+  (let [speed (subscribe [:speed])
+        sent-speed (subscribe [:sent-speed])]
+    (when-not (same-speed? @speed @sent-speed)
+      (ble-send @speed)
+      (dispatch [:set-sent-speed @speed]))))
+
+(defn- rate-x-y [p-x p-y view-x view-y view-w view-h]
   (let [harf-w (/ view-w 2)
         harf-h (/ view-h 2)
         rate-x (/ (- p-x view-x harf-w) harf-w)

@@ -16,7 +16,7 @@
   (and (= (:lf speed1) (:lf speed2))
        (= (:lb speed1) (:lb speed2))
        (= (:rf speed1) (:rf speed2))
-       (= (:lb speed1) (:lb speed2))))
+       (= (:rb speed1) (:rb speed2))))
 
 (defn send-speed []
   (let [speed (subscribe [:speed])

@@ -10,9 +10,9 @@
 
 (def control-modes
   [{:id :single-joystick
-    :name "A Joystick"}
+    :name "Joystick"}
    {:id :toggle-bars
-    :name "Toggle"}
+    :name "Toggle Bars"}
    {:id :tile-buttons
     :name "Tile Buttons"}])
 
@@ -21,7 +21,8 @@
     (fn []
       [v.common/view
        [v.common/view {:style {:flex-direction "row"
-                               :margin-bottom 40}}
+                               :margin-bottom 20
+                               :align-self "center"}}
         (doall
          (for [{:keys [id name]} control-modes
                :let [selected? (= @control-mode id)]]

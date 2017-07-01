@@ -3,6 +3,7 @@
             [reagent.core :as r]
             [re-natal-esp32control-app.devices.ble :as ble]
             [re-natal-esp32control-app.views.common :as v.common]
+            [re-natal-esp32control-app.views.ble-control.common :as v.ble-common]
             [re-natal-esp32control-app.views.ble-control.single-joystick :as v.single-joystick]
             [re-natal-esp32control-app.views.ble-control.tile-buttons :as v.tile-buttons]
             [re-natal-esp32control-app.views.ble-control.toggle-bars :as v.toggle-bars]
@@ -43,7 +44,8 @@
 
 (defn ble-control-page []
   (let [current-device (subscribe [:get-current-device])
-        connected? (r/atom false)]
+        connected? (r/atom false)
+        interval (r/atom nil)]
     (r/create-class
      {:reagent-render
       (fn []
@@ -63,4 +65,7 @@
       :component-will-mount (fn []
                               (ble/connect (:id @current-device)
                                            :on-success #(reset! connected? true)))
-      :component-will-unmount #(ble/disconnect (:id @current-device))})))
+      :component-did-mount #(reset! interval (js/setInterval v.ble-common/send-speed 50))
+      :component-will-unmount (fn []
+                                (js/clearInterval @interval)
+                                (ble/disconnect (:id @current-device)))})))

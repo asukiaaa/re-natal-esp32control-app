@@ -24,10 +24,4 @@
       (dispatch [:set-speed speed]))))
 
 (defn single-joystick-panel []
-  (let [interval (r/atom nil)]
-    (r/create-class
-     {:reagent-render
-      (fn []
-        [v.ble-common/joystick :single-joystick #(set-speed %) #(set-speed {:x 0 :y 0})])
-      :component-did-mount #(reset! interval (js/setInterval v.ble-common/send-speed 50))
-      :component-will-unmount #(js/clearInterval @interval)})))
+  [v.ble-common/joystick :single-joystick #(set-speed %) #(set-speed {:x 0 :y 0})])

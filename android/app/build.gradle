@@ -118,6 +118,7 @@ android {
         debug {
             manifestPlaceholders = [excludeSystemAlertWindowPermission: "false"]
             versionNameSuffix "-dev"
+            applicationIdSuffix ".dev"
         }
         release {
             manifestPlaceholders = [excludeSystemAlertWindowPermission: "true"]

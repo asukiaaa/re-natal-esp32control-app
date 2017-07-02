@@ -107,7 +107,7 @@ For `android/app/src/main/AndroidManifest.xml`.
 ```
 
 ## Assign different version and id to release and debug application
-You can change version for debug and release app with adding the following setting to `android/app/build.gradle`.
+You can change version and id for debug and release app with adding the following setting to `android/app/build.gradle`.
 
 ```
 android {
@@ -116,6 +116,7 @@ android {
         debug {
             ...
             versionNameSuffix "-dev"
+            applicationIdSuffix ".dev" // Cause error about Activity class when targetSdkversion is 23.
         }
     }
 }

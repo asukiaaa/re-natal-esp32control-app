@@ -6,6 +6,7 @@ re-natal init reNatalEsp32controlApp
 cd re-natal-esp32-control-app
 npm install --save react-native-ble-manager
 re-natal use-component react-native-ble-manager
+re-natal use-component moment
 re-natal use-android-device real
 re-natal use-figwheel
 rect-native link

@@ -4,6 +4,8 @@
             [re-natal-esp32control-app.views.common :as v.common]
             [re-frame.core :refer [subscribe dispatch dispatch-sync]]))
 
+(def moment (js/require "moment"))
+
 (def service-id "00ff")
 (def characteristic-id "ff01")
 
@@ -18,12 +20,21 @@
        (= (:rf speed1) (:rf speed2))
        (= (:rb speed1) (:rb speed2))))
 
+(defn- zero-speed? [speed]
+  (empty?
+   (for [key [:lf :lb :rf :rb]
+         :when (not (zero? (or (key speed) 0)))]
+     key)))
+
 (defn send-speed []
   (let [speed (subscribe [:speed])
-        sent-speed (subscribe [:sent-speed])]
-    (when-not (same-speed? @speed @sent-speed)
+        sent-speed (subscribe [:sent-speed])
+        now-500ms (.subtract (moment) 500 "ms")]
+    (when (or (not (same-speed? @speed @sent-speed))
+              (and (not (zero-speed? @speed))
+                   (.isAfter now-500ms (moment (:sent_at @sent-speed)))))
       (ble-send @speed)
-      (dispatch [:set-sent-speed @speed]))))
+      (dispatch [:set-sent-speed (assoc @speed :sent_at (js/Date.))]))))
 
 (defn- rate-x-y [p-x p-y view-x view-y view-w view-h]
   (let [harf-w (/ view-w 2)

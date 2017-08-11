@@ -2962,6 +2962,10 @@ react-native-ble-manager@5.0.4:
   version "5.0.4"
   resolved "https://registry.yarnpkg.com/react-native-ble-manager/-/react-native-ble-manager-5.0.4.tgz#0d879431d54156f81617de5150d57db167e6557d"
 
+react-native-sensor-manager@^0.1.10:
+  version "0.1.10"
+  resolved "https://registry.yarnpkg.com/react-native-sensor-manager/-/react-native-sensor-manager-0.1.10.tgz#c228280d67fddb668e715b4d7b823188de504da8"
+
 react-native@0.45.1:
   version "0.45.1"
   resolved "https://registry.yarnpkg.com/react-native/-/react-native-0.45.1.tgz#b3283c4a88233421f9c662a2ff1a4ccc8a9f07c0"

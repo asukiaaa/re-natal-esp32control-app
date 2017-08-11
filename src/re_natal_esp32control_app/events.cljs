@@ -73,3 +73,8 @@
  :set-sent-speed
  (fn [db [_ speed]]
    (assoc db :sent-speed speed)))
+
+(reg-event-db
+ :set-mag-values
+ (fn [db [_ mag-values]]
+   (assoc db :mag-values mag-values)))

@@ -30,3 +30,8 @@
  :sent-speed
  (fn [db _]
    (:sent-speed db)))
+
+(reg-sub
+ :mag-values
+ (fn [db _]
+   (:mag-values db)))

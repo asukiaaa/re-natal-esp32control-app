@@ -7,15 +7,18 @@
             [re-natal-esp32control-app.views.ble-control.single-joystick :as v.single-joystick]
             [re-natal-esp32control-app.views.ble-control.tile-buttons :as v.tile-buttons]
             [re-natal-esp32control-app.views.ble-control.toggle-bars :as v.toggle-bars]
+            [re-natal-esp32control-app.views.ble-control.magnetometer :as v.mag]
             [re-frame.core :refer [subscribe dispatch dispatch-sync]]))
 
 (def control-modes
   [{:id :single-joystick
     :name "Joystick"}
    {:id :toggle-bars
-    :name "Toggle Bars"}
+    :name "Bars"}
    {:id :tile-buttons
-    :name "Tile Buttons"}])
+    :name "Buttons"}
+   {:id :magnet
+    :name "Magnet"}])
 
 (defn control-area []
   (let [control-mode (r/atom (:id (first control-modes)))]
@@ -40,6 +43,7 @@
        (case @control-mode
          :tile-buttons [v.tile-buttons/tile-buttons-panel]
          :toggle-bars [v.toggle-bars/toggle-bars-panel]
+         :magnet [v.mag/mag-panel]
          [v.single-joystick/single-joystick-panel])])))
 
 (defn ble-control-page []

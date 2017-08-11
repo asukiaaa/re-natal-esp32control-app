@@ -4,6 +4,7 @@
             [re-natal-esp32control-app.events]
             [re-natal-esp32control-app.subs]
             [re-natal-esp32control-app.devices.ble :as ble]
+            [re-natal-esp32control-app.devices.magnetometer :as mag]
             [re-natal-esp32control-app.views.common :as v.common]
             [re-natal-esp32control-app.views.ble-control :as v.ble-control]
             [re-natal-esp32control-app.views.top :as v.top]))
@@ -21,4 +22,5 @@
 (defn init []
   (dispatch-sync [:initialize-db])
   (ble/init)
+  (mag/init)
   (.registerComponent app-registry "reNatalEsp32ControlApp" #(r/reactify-component app-root)))

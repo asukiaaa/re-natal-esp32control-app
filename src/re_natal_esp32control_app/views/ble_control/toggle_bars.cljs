@@ -71,18 +71,14 @@
       #(reset! ref-obj (-> (.-refs %)
                            (aget ref)))})))
 
-(defn calc-fb-from-rate [rate]
-  (if (> rate 0.5)
-    {:f 0 :b (int (* 255 (* 2 (- rate 0.5))))}
-    {:f (int (* 255 (* 2 (- 0.5 rate)))) :b 0}))
-
 (defn set-speed [indexes-rate]
-  (let [l-fb (calc-fb-from-rate (get indexes-rate 0))
-        r-fb (calc-fb-from-rate (get indexes-rate 1))
-        speed {:lf (:f l-fb)
-               :lb (:b l-fb)
-               :rf (:f r-fb)
-               :rb (:b r-fb)}]
+  (let [rate->byte (fn [rate] (-> (- 1 rate)
+                                  (* 255)
+                                  (max 0)
+                                  (min 255)
+                                  int))
+        speed {:l (rate->byte (get indexes-rate 0))
+               :r (rate->byte (get indexes-rate 1))}]
     (dispatch [:set-speed speed])))
 
 (defn toggle-bars-panel []

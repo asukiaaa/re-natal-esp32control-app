@@ -5,7 +5,7 @@
             [re-frame.core :refer [dispatch]]))
 
 (defn set-speed [speed]
-  (dispatch [:set-speed (merge {:lf 0 :lb 0 :rf 0 :rb 0} speed)]))
+  (dispatch [:set-speed (merge {:l 128 :r 128} speed)]))
 
 (defn control-button [label speed]
   (let [set-and-send-speed (fn [speed]
@@ -24,14 +24,14 @@
 (defn tile-buttons-panel []
   [v.common/view {:style {:align-content "center" :align-self "center"}}
    [v.common/view {:style {:flex-direction "row"}}
-    [control-button "left foreward" {:rf 255}]
-    [control-button "forward"       {:lf 255 :rf 255}]
-    [control-button "right-forward" {:lf 255}]]
+    [control-button "left foreward" {:r 255}]
+    [control-button "forward"       {:l 255 :r 255}]
+    [control-button "right-forward" {:l 255}]]
    [v.common/view {:style {:flex-direction "row"}}
-    [control-button "turn left"     {:lb 255 :rf 255}]
+    [control-button "turn left"     {:l 0 :r 255}]
     [v.common/view {:style {:width 100 :height 100 :margin 5}}]
-    [control-button "trun right"    {:lf 255 :rb 255}]]
+    [control-button "trun right"    {:l 255 :r 0}]]
    [v.common/view {:style {:flex-direction "row"}}
-    [control-button "back left"     {:rb 255}]
-    [control-button "back"          {:lb 255 :rb 255}]
-    [control-button "back right"    {:lb 255}]]])
+    [control-button "back left"     {:r 0}]
+    [control-button "back"          {:l 0 :r 0}]
+    [control-button "back right"    {:l 0}]]])

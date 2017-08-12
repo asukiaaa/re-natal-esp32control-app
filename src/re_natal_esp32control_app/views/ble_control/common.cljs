@@ -9,21 +9,21 @@
 (def service-id "00ff")
 (def characteristic-id "ff01")
 
-(defn ble-send [{:keys [lf lb rf rb]}]
+(defn ble-send [{:keys [l r]}]
   (let [current-device (subscribe [:get-current-device])
-        data (map #(if (nil? %) 0 %) [lf lb rf rb])]
+        data (concat [(.charCodeAt "m" 0)]
+                     (map #(if (nil? %) 0 %) [l r]))]
     (ble/write (:id @current-device) service-id characteristic-id data)))
 
 (defn- same-speed? [speed1 speed2]
-  (and (= (:lf speed1) (:lf speed2))
-       (= (:lb speed1) (:lb speed2))
-       (= (:rf speed1) (:rf speed2))
-       (= (:rb speed1) (:rb speed2))))
+  (and (= (:l speed1) (:r speed2))
+       (= (:l speed1) (:r speed2))))
 
-(defn- zero-speed? [speed]
+(defn- stop-speed? [speed]
   (empty?
-   (for [key [:lf :lb :rf :rb]
-         :when (not (zero? (or (key speed) 0)))]
+   (for [key [:l :r]
+         :let [value (key speed)]
+         :when (and (not= speed 128) (not= speed 127))]
      key)))
 
 (defn send-speed []
@@ -31,7 +31,7 @@
         sent-speed (subscribe [:sent-speed])
         now-500ms (.subtract (moment) 500 "ms")]
     (when (or (not (same-speed? @speed @sent-speed))
-              (and (not (zero-speed? @speed))
+              (and (not (stop-speed? @speed))
                    (.isAfter now-500ms (moment (:sent_at @sent-speed)))))
       (ble-send @speed)
       (dispatch [:set-sent-speed (assoc @speed :sent_at (js/Date.))]))))

@@ -10,6 +10,9 @@
       (max 0)
       (* 255)))
 
+(defn f+b->byte [f b]
+  (int (/ (+ f (- 255 b)) 2)))
+
 (defn set-speed [{:keys [x y]}]
   (when (and x y)
     (let [f (rate->byte (- y))
@@ -20,7 +23,7 @@
           rf (max 0 (- f r))
           lb (max 0 (- b l))
           rb (max 0 (- b r))
-          speed {:lf (int lf) :rf (int rf) :lb (int lb) :rb (int rb)}]
+          speed {:l (f+b->byte lf lb) :r (f+b->byte rf rb)}]
       (dispatch [:set-speed speed]))))
 
 (defn single-joystick-panel []

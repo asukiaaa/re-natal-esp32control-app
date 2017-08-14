@@ -16,7 +16,7 @@
         [v.common/view {:style {:width box-w :height box-w :background-color "#eee" :margin-bottom 10}}
          [v.common/view {:style {:width box-w :height box-w
                                  :position :absolute :top 0 :left 0
-                                 :transform [{:rotate (str (or (- (:degree @mag-values) 90) 0) "deg")}]}}
+                                 :transform [{:rotate (str (or (+ (:degree @mag-values) 90) 0) "deg")}]}}
           [v.common/view {:style {:top 0
                                   :left (/ box-w 4)
                                   :position "absolute"

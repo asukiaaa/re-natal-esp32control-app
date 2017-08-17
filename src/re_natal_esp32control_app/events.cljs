@@ -78,3 +78,8 @@
  :set-mag-values
  (fn [db [_ mag-values]]
    (assoc db :mag-values mag-values)))
+
+(reg-event-db
+ :set-directoin-speed
+ (fn [db [_ direction-speed]]
+   (assoc db :direction-speed direction-speed)))

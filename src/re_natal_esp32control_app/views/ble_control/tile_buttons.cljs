@@ -4,10 +4,10 @@
             [re-natal-esp32control-app.views.ble-control.common :as v.ble-common]
             [re-frame.core :refer [dispatch]]))
 
-(defn set-speed [speed]
+(defn- set-speed [speed]
   (dispatch [:set-speed (merge {:l 128 :r 128} speed)]))
 
-(defn control-button [label speed]
+(defn- control-button [label speed]
   (let [set-and-send-speed (fn [speed]
                              (set-speed speed)
                              (v.ble-common/send-speed))]
@@ -22,16 +22,24 @@
       label]]))
 
 (defn tile-buttons-panel []
-  [v.common/view {:style {:align-content "center" :align-self "center"}}
-   [v.common/view {:style {:flex-direction "row"}}
-    [control-button "left foreward" {:r 255}]
-    [control-button "forward"       {:l 255 :r 255}]
-    [control-button "right-forward" {:l 255}]]
-   [v.common/view {:style {:flex-direction "row"}}
-    [control-button "turn left"     {:l 0 :r 255}]
-    [v.common/view {:style {:width 100 :height 100 :margin 5}}]
-    [control-button "trun right"    {:l 255 :r 0}]]
-   [v.common/view {:style {:flex-direction "row"}}
-    [control-button "back left"     {:r 0}]
-    [control-button "back"          {:l 0 :r 0}]
-    [control-button "back right"    {:l 0}]]])
+  (let [interval (r/atom nil)
+        set-interval #(reset! interval (js/setInterval v.ble-common/send-speed 50))
+        clear-interval #(js/clearInterval @interval)]
+    (r/create-class
+     {:reagent-render
+      (fn []
+        [v.common/view {:style {:align-content "center" :align-self "center"}}
+         [v.common/view {:style {:flex-direction "row"}}
+          [control-button "left foreward" {:r 255}]
+          [control-button "forward"       {:l 255 :r 255}]
+          [control-button "right-forward" {:l 255}]]
+         [v.common/view {:style {:flex-direction "row"}}
+          [control-button "turn left"     {:l 0 :r 255}]
+          [v.common/view {:style {:width 100 :height 100 :margin 5}}]
+          [control-button "trun right"    {:l 255 :r 0}]]
+         [v.common/view {:style {:flex-direction "row"}}
+          [control-button "back left"     {:r 0}]
+          [control-button "back"          {:l 0 :r 0}]
+          [control-button "back right"    {:l 0}]]])
+      :component-did-mount set-interval
+      :component-will-unmount clear-interval})))

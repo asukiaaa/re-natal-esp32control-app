@@ -82,4 +82,12 @@
     (dispatch [:set-speed speed])))
 
 (defn toggle-bars-panel []
-  [toggle-bars :lr-bars #(set-speed %) #(set-speed %)])
+  (let [interval (r/atom nil)
+        set-interval #(reset! interval (js/setInterval v.ble-common/send-speed 50))
+        clear-interval #(js/clearInterval @interval)]
+    (r/create-class
+     {:reagent-render
+      (fn []
+        [toggle-bars :lr-bars #(set-speed %) #(set-speed %)])
+      :component-did-mount set-interval
+      :component-will-unmount clear-interval})))

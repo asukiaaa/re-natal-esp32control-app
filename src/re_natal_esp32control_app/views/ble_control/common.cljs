@@ -9,10 +9,18 @@
 (def service-id "00ff")
 (def characteristic-id "ff01")
 
-(defn ble-send [{:keys [l r]}]
+(defn- ble-send [{:keys [l r]}]
   (let [current-device (subscribe [:get-current-device])
         data (concat [(.charCodeAt "m" 0)]
                      (map #(if (nil? %) 0 %) [l r]))]
+    (ble/write (:id @current-device) service-id characteristic-id data)))
+
+(defn- ble-send-direction [{:keys [degree speed]}]
+  (let [current-device (subscribe [:get-current-device])
+        degree (int degree)
+        plus-degree (if (> degree 0) degree 0)
+        minus-degree (if (< degree 0) (- degree) 0)
+        data [(.charCodeAt "d" 0) plus-degree minus-degree (int speed)]]
     (ble/write (:id @current-device) service-id characteristic-id data)))
 
 (defn- same-speed? [speed1 speed2]
@@ -36,12 +44,22 @@
       (ble-send @speed)
       (dispatch [:set-sent-speed (assoc @speed :sent_at (js/Date.))]))))
 
+(defn send-direction []
+  (let [direction-speed (subscribe [:direction-speed])]
+    (ble-send-direction @direction-speed)))
+
+(defn- limit-range [value]
+  (-> value
+      (min 1)
+      (max -1)))
+
 (defn- rate-x-y [p-x p-y view-x view-y view-w view-h]
   (let [harf-w (/ view-w 2)
         harf-h (/ view-h 2)
         rate-x (/ (- p-x view-x harf-w) harf-w)
         rate-y (/ (- p-y view-y harf-h) harf-h)]
-    {:x rate-x :y rate-y}))
+    {:x (limit-range rate-x)
+     :y (limit-range rate-y)}))
 
 (defn joystick [id on-move on-release & [{:keys [width height] :or {width 300 height 300}}]]
   (let [view-x (r/atom nil)

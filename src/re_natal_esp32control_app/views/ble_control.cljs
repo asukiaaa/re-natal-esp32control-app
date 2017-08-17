@@ -48,9 +48,7 @@
 
 (defn ble-control-page []
   (let [current-device (subscribe [:get-current-device])
-        connected? (r/atom false)
-        interval (r/atom nil)
-        set-interval (fn [] (reset! interval (js/setInterval v.ble-common/send-speed 50)))]
+        connected? (r/atom false)]
     (r/create-class
      {:reagent-render
       (fn []
@@ -70,8 +68,6 @@
       :component-will-mount (fn []
                               (ble/connect (:id @current-device)
                                            :on-success (fn []
-                                                         (reset! connected? true)
-                                                         (set-interval))))
+                                                         (reset! connected? true))))
       :component-will-unmount (fn []
-                                (js/clearInterval @interval)
                                 (ble/disconnect (:id @current-device)))})))

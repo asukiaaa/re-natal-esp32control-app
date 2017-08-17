@@ -35,3 +35,8 @@
  :mag-values
  (fn [db _]
    (:mag-values db)))
+
+(reg-sub
+ :direction-speed
+ (fn [db _]
+   (:direction-speed db)))

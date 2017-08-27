@@ -16,9 +16,10 @@
      {:reagent-render
       (fn []
         [v.common/view {:style {:width box-w :height box-w :background-color "#eee" :margin-bottom 10}}
+         #_[v.common/text (:degree @mag-values)]
          [v.common/view {:style {:width box-padded-w :height box-padded-w
                                  :position :absolute :top box-padding :left box-padding
-                                 :transform [{:rotate (str (or (+ (:degree @mag-values) 90) 0) "deg")}]}}
+                                 :transform [{:rotate (str (or (:degree @mag-values) 0) "deg")}]}}
           [v.common/view {:style {:top 0
                                   :left (/ box-padded-w 4)
                                   :position "absolute"

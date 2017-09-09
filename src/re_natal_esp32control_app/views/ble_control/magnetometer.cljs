@@ -46,7 +46,7 @@
         joystick-direction (-> (.atan2 js/Math x (- y))
                               (* 180)
                               (/ (.-PI js/Math)))
-        direction (in-pi-roop (+ mag-direction joystick-direction))
+        direction (in-pi-roop (- joystick-direction mag-direction))
         speed (-> (.sqrt js/Math (+ (* x x) (* y y)))
                   (min 1)
                   (* 255))]

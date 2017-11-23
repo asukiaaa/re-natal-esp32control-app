@@ -7,9 +7,26 @@
 
 (def ReactNative (js/require "react-native"))
 (def app-registry (.-AppRegistry ReactNative))
+(def back-handler (.-BackHandler ReactNative))
+
+(defn on-back-pressed []
+  (let [page (subscribe [:get-page])]
+    (if (nil? @page)
+      false
+      (do
+        (dispatch [:set-page nil])
+        true))))
 
 (defn app-root []
-  (config/app-root))
+  (r/create-class
+   {:component-will-mount
+    #(.addEventListener back-handler "hardwareBackPress" on-back-pressed)
+
+    :component-will-unmount
+    #(.removeEventListener back-handler "hardwareBackPress" on-back-pressed)
+
+    :reagent-render
+    config/app-root}))
 
 (defn init []
   (config/init-once)

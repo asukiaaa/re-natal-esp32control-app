@@ -29,6 +29,12 @@ public class MainApplication extends Application implements ReactApplication {
           new SensorManagerPackage()
       );
     }
+
+    @Override
+    protected String getJSMainModuleName() {
+      return "index.android";
+      //return "index";
+    }
   };
 
   @Override

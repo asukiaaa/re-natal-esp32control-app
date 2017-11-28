@@ -1,5 +1,5 @@
 (ns re-natal-esp32control-app.db
-  (:require [clojure.spec :as s]))
+  (:require [clojure.spec.alpha :as s]))
 
 ;; spec of app-db
 (s/def ::greeting string?)

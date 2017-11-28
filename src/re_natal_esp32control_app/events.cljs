@@ -1,7 +1,7 @@
 (ns re-natal-esp32control-app.events
   (:require
    [re-frame.core :refer [reg-event-db after]]
-   [clojure.spec :as s]
+   [clojure.spec.alpha :as s]
    [re-natal-esp32control-app.db :as db :refer [app-db]]))
 
 ;; -- Interceptors ------------------------------------------------------------

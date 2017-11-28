@@ -40,3 +40,8 @@
  :direction-speed
  (fn [db _]
    (:direction-speed db)))
+
+(reg-sub
+ :sent-direction-speed
+ (fn [db _]
+   (:sent-direction-speed db)))

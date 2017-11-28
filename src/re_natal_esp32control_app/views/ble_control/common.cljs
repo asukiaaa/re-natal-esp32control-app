@@ -45,8 +45,11 @@
       (dispatch [:set-sent-speed (assoc @speed :sent_at (js/Date.))]))))
 
 (defn send-direction []
-  (let [direction-speed (subscribe [:direction-speed])]
-    (ble-send-direction @direction-speed)))
+  (let [direction-speed (subscribe [:direction-speed])
+        sent-direction-speed (subscribe [:sent-direction-speed])]
+    (when-not (and (= 0 (:speed @sent-direction-speed)) (= 0 (:speed @direction-speed)))
+      (ble-send-direction @direction-speed)
+      (dispatch [:set-sent-direction-speed @direction-speed]))))
 
 (defn- limit-range [value]
   (-> value

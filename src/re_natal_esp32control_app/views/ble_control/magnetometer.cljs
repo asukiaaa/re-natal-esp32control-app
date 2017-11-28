@@ -62,5 +62,9 @@
         [v.common/view {:style {:align-items "center"}}
          [compass-panel]
          [v.ble-common/joystick :compass-joystick #(set-direction-speed %) #(set-direction-speed {:x 0 :y 0})]])
-      :component-did-mount set-interval
+      :component-did-mount
+      (fn []
+        (dispatch [:set-directoin-speed {:speed 0 :direction 0}])
+        (dispatch [:set-sent-direction-speed nil])
+        (set-interval))
       :component-will-unmount clear-interval})))

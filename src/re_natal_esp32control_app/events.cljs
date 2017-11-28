@@ -83,3 +83,8 @@
  :set-directoin-speed
  (fn [db [_ direction-speed]]
    (assoc db :direction-speed direction-speed)))
+
+(reg-event-db
+ :set-sent-direction-speed
+ (fn [db [_ direction-speed]]
+   (assoc db :sent-direction-speed direction-speed)))

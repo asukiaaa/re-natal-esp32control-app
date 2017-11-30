@@ -63,4 +63,8 @@
   (-> (.retrieveServices BleManager device-id)
       (.then (fn [peri-info]
                (.writeWithoutResponse BleManager device-id service-id chara-id
-                                      (clj->js data))))))
+                                      (clj->js data))))
+      (.catch (fn [error]
+                (when (= error "Device is not connected")
+                  (connect device-id
+                           :on-success #(write device-id service-id chara-id data)))))))

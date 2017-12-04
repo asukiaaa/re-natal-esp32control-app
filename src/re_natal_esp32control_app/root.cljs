@@ -14,7 +14,6 @@
     (r/create-class
      {:component-will-mount
       (fn []
-        (prn "app-root initted")
         (ble/init)
         (mag/init))
       :reagent-render
